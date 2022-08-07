@@ -58,30 +58,30 @@ export const autoLogoutAfterMillisec = (ms) => {
     setTimeout(() => {
       dispatch(logout());
     }, ms);
-
-    //logout hiihgui token shinechleh bol
-    // axios
-    //   .post(
-    //     "https://securetoken.googleapis.com/v1/token?key=AIzaSyCpmoYbZ60pviPWqOSKgU8cB35Wrd9q_YQ",
-    //     {
-    //       grant_type: "refresh_token",
-    //       refresh_token: localStorage.getItem("refreshToken"),
-    //     }
-    //   )
-    //   .then((result) => {
-    //     //localstorage hadgalah
-    //     const token = result.data.id_token;
-    //     const userId = result.data.user_id;
-    //     const expiresIn = result.data.expires_nn;
-    //     const expireDate = new Date(new Date().getTime() + expiresIn * 1000);
-    //     const refreshToken = result.data.refresh_token;
-    //     localStorage.setItem("token", token);
-    //     localStorage.setItem("userId", userId);
-    //     localStorage.setItem("refreshToken", refreshToken);
-    //     localStorage.setItem("expireDate", expireDate);
-    //     dispatch(loginUserSuccess(token, userId));
-    //     dispatch(autoLogoutAfterMillisec(expiresIn * 1000));
-    //   })
-    //   .catch((error) => dispatch(loginUserError(error)));
   };
 };
+
+//logout hiihgui token shinechleh bol
+// axios
+//   .post(
+//     "https://securetoken.googleapis.com/v1/token?key=AIzaSyCpmoYbZ60pviPWqOSKgU8cB35Wrd9q_YQ",
+//     {
+//       grant_type: "refresh_token",
+//       refresh_token: localStorage.getItem("refreshToken"),
+//     }
+//   )
+//   .then((result) => {
+//     //localstorage hadgalah
+//     const token = result.data.id_token;
+//     const userId = result.data.user_id;
+//     const expiresIn = result.data.expires_nn;
+//     const expireDate = new Date(new Date().getTime() + expiresIn * 1000);
+//     const refreshToken = result.data.refresh_token;
+//     localStorage.setItem("token", token);
+//     localStorage.setItem("userId", userId);
+//     localStorage.setItem("refreshToken", refreshToken);
+//     localStorage.setItem("expireDate", expireDate);
+//     dispatch(loginUserSuccess(token, userId));
+//     dispatch(autoLogoutAfterMillisec(expiresIn * 1000));
+//   })
+//   .catch((error) => dispatch(loginUserError(error)));

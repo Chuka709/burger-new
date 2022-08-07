@@ -1,16 +1,16 @@
 import axios from "../../axios-orders";
 export const loadOrders = (userId) => {
   return function (dispatch, getState) {
-    dispatch(loadOrdersStart());
-    const token = getState().signupLoginReducer.token;
-    // console.log("dddddddddddddddddddddd", userId);
-    axios
-      .get(`orders.json?&auth=${token}&orderBy="userId"&equalTo="${userId}"`)
-      .then((response) => {
-        const loadedOrders = Object.entries(response.data).reverse();
-        dispatch(loadOrdersSuccess(loadedOrders));
-      })
-      .catch((error) => dispatch(loadOrdersError(error)));
+    // dispatch(loadOrdersStart());
+    // const token = getState().signupLoginReducer.token;
+    // // console.log("dddddddddddddddddddddd", userId);
+    // axios
+    //   .get(`orders.json?&auth=${token}&orderBy="userId"&equalTo="${userId}"`)
+    //   .then((response) => {
+    //     const loadedOrders = Object.entries(response.data).reverse();
+    //     dispatch(loadOrdersSuccess(loadedOrders));
+    //   })
+    //   .catch((error) => dispatch(loadOrdersError(error)));
   };
 };
 
@@ -32,20 +32,26 @@ export const loadOrdersError = (error) => {
   };
 };
 
-//ЗАХИАЛГА ХАДГАЛАХ ХЭСЭГ
-
-export const saveOrder = (newOrder) => {
-  return function (dispatch, getState) {
-    dispatch(saveOrdersStart());
-    const token = getState().signupLoginReducer.token;
-    axios
-      .post(`/orders.json?auth=${token}`, newOrder)
-      .then((response) => {
-        dispatch(saveOrdersSuccess());
-      })
-      .catch((error) => dispatch(saveOrdersError(error)));
+export const clearOrder = () => {
+  return {
+    type: "CLEAR_ORDER",
   };
 };
+
+//ЗАХИАЛГА ХАДГАЛАХ ХЭСЭГ
+
+// export const saveOrder = (newOrder) => {
+//   return function (dispatch, getState) {
+//     dispatch(saveOrdersStart());
+//     const token = getState().signupLoginReducer.token;
+//     axios
+//       .post(`/orders.json?auth=${token}`, newOrder)
+//       .then((response) => {
+//         dispatch(saveOrdersSuccess());
+//       })
+//       .catch((error) => dispatch(saveOrdersError(error)));
+//   };
+// };
 
 export const saveOrdersStart = () => {
   return {

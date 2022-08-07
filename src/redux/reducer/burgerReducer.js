@@ -5,21 +5,18 @@ const initialState = {
     bacon: 0,
     meat: 0,
   },
+  totalPrice: 1000,
+  purchasing: false,
   ingredientNames: {
     bacon: "Гахайн мах",
     cheese: "Бяслаг",
     meat: "Үхрийн мах",
     salad: "Салад",
   },
-  totalPrice: 1000,
-  purchasing: false,
 };
-const INGREDIENT_PRICES = {
-  salad: 150,
-  cheese: 250,
-  bacon: 800,
-  meat: 1500,
-};
+
+const INGREDIENT_PRICES = { salad: 150, cheese: 250, bacon: 800, meat: 1500 };
+
 const reducer = (state = initialState, action) => {
   if (action.type === "ADD_INGREDIENT") {
     return {
@@ -42,7 +39,10 @@ const reducer = (state = initialState, action) => {
       totalPrice: newPrice,
       purchasing: newPrice > 1000,
     };
+  } else if (action.type === "CLEAR_ORDER") {
+    return initialState;
   }
+
   return state;
 };
 

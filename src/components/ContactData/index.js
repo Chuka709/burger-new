@@ -1,102 +1,99 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { useHistory } from "react-router-dom";
 import Button from "../General/Button";
 import css from "./style.module.css";
-import axios from "../../axios-orders";
 import Spinner from "../General/Spinner";
-import { withRouter } from "react-router-dom";
-import * as action from "../../redux/actions/orderActions";
+import BurgerContext from "../../context/BurgerContext";
+import UserContext from "../../context/UserContext";
 
-class ContactData extends Component {
-  state = {
-    name: null,
-    city: null,
-    street: null,
-  };
-  changeName = (e) => {
-    this.setState({ name: e.target.value });
-  };
-  changeStreet = (e) => {
-    this.setState({ street: e.target.value });
-  };
-  changeCity = (e) => {
-    this.setState({ city: e.target.value });
-  };
-  componentDidUpdate() {
-    if (
-      this.props.newOrderStatus.finished &&
-      !this.props.newOrderStatus.error
-    ) {
-      this.props.history.replace("/orders");
+const ContactData = (props) => {
+  const history = useHistory();
+  const [name, setName] = useState("");
+  const [city, setCity] = useState("");
+  const [street, setStreet] = useState("");
+
+  const burgerContext = useContext(BurgerContext);
+  const userContext = useContext(UserContext);
+
+  const dunRef = useRef();
+
+  useEffect(() => {
+    // console.log("contact data effect....");
+    if (burgerContext.burger.finished && !burgerContext.burger.error) {
+      history.replace("/orders");
     }
-  }
-  saveOrder = () => {
+    return () => {
+      //tseverlegch function - zahialgiig hoosolj daraagiin zahialgad beldene
+      // console.log("order clearing........");
+      burgerContext.clearBurger();
+    };
+  }, [burgerContext.burger.finished]);
+
+  const changeName = (e) => {
+    if (dunRef.current.style.color === "red")
+      dunRef.current.style.color = "green";
+    else dunRef.current.style.color = "red";
+    setName(e.target.value);
+  };
+  const changeStreet = (e) => {
+    setStreet(e.target.value);
+  };
+  const changeCity = (e) => {
+    setCity(e.target.value);
+  };
+
+  const saveOrder = () => {
     const newOrder = {
-      userId: this.props.userId,
-      orts: this.props.ingredients,
-      dun: this.props.price,
+      userId: userContext.state.userId,
+      orts: burgerContext.burger.ingredients,
+      dun: burgerContext.burger.totalPrice,
       hayag: {
-        name: this.state.name,
-        city: this.state.city,
-        street: this.state.street,
+        name,
+        city,
+        street,
       },
     };
-    this.props.saveOrderAction(newOrder);
+    burgerContext.saveBurger(newOrder, userContext.state.token);
   };
-  render() {
-    // console.log(this.props);
-    return (
-      <div className={css.ContactData}>
-        <div>
-          {this.props.newOrderStatus.error &&
-            `Захиалгыг хадгалах явцад алдаа гарлаа : ${this.props.newOrderStatus.error}`}
-        </div>
-        {this.props.newOrderStatus.saving ? (
-          <Spinner />
-        ) : (
-          <div>
-            <p>Захиалгын дүн : {this.props.price}₮</p>
-            <input
-              onChange={this.changeName}
-              type="text"
-              name="name"
-              placeholder="Таны нэр"
-            />
-            <input
-              onChange={this.changeStreet}
-              type="text"
-              name="street"
-              placeholder="Гэрийн хаяг"
-            />
-            <input
-              onChange={this.changeCity}
-              type="text"
-              name="city"
-              placeholder="Хот"
-            />
-            <Button text="ИЛГЭЭХ" btnType="Success" clicked={this.saveOrder} />
-          </div>
-        )}
+  // console.log(props);
+  return (
+    <div className={css.ContactData}>
+      <div>
+        {burgerContext.burger.error &&
+          `Захиалгыг хадгалах явцад алдаа гарлаа : ${burgerContext.burger.error}`}
       </div>
-    );
-  }
-}
-
-const mapStateToProps = (state) => {
-  return {
-    price: state.burgerReducer.totalPrice,
-    ingredients: state.burgerReducer.ingredients,
-    newOrderStatus: state.orderReducer.newOrder,
-    userId: state.signupLoginReducer.userId,
-  };
+      {burgerContext.burger.saving ? (
+        <Spinner />
+      ) : (
+        <div>
+          <div ref={dunRef}>
+            <strong style={{ fontSize: "16px" }}>
+              <p>Захиалгын дүн : {burgerContext.burger.totalPrice}₮</p>
+            </strong>
+          </div>
+          <input
+            onChange={changeName}
+            type="text"
+            name="name"
+            placeholder="Таны нэр"
+          />
+          <input
+            onChange={changeStreet}
+            type="text"
+            name="street"
+            placeholder="Гэрийн хаяг"
+          />
+          <input
+            onChange={changeCity}
+            type="text"
+            name="city"
+            placeholder="Хот"
+          />
+          <Button text="ИЛГЭЭХ" btnType="Success" clicked={saveOrder} />
+        </div>
+      )}
+    </div>
+  );
 };
 
-const mapsDispatchToProps = (dispatch) => {
-  return {
-    saveOrderAction: (newOrder) => dispatch(action.saveOrder(newOrder)),
-  };
-};
-export default connect(
-  mapStateToProps,
-  mapsDispatchToProps
-)(withRouter(ContactData));
+export default ContactData;
